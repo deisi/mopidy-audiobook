@@ -12,13 +12,13 @@ def get_version(filename):
 
 
 setup(
-    name='Mopidy-Audiobooks',
-    version=get_version('mopidy_audiobooks/__init__.py'),
-    url='https://github.com/deisi/mopidy-audiobooks',
+    name='Mopidy-Audiobook',
+    version=get_version('mopidy_audiobook/__init__.py'),
+    url='https://github.com/deisi/mopidy-audiobook',
     license='Apache License, Version 2.0',
     author='Malte Deiseroth',
     author_email='mdeiseroth88@gmail.com',
-    description='Mopidy extensions to play audiobooks',
+    description='Mopidy extensions to play audiobook',
     long_description=open('README.rst').read(),
     packages=find_packages(exclude=['tests', 'tests.*']),
     zip_safe=False,
@@ -30,7 +30,7 @@ setup(
     ],
     entry_points={
         'mopidy.ext': [
-            'audiobooks = mopidy_audiobooks:Extension',
+            'audiobook = mopidy_audiobook:Extension',
         ],
     },
     classifiers=[

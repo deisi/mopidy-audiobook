@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from mopidy_audiobooks import Extension, frontend as frontend_lib
+from mopidy_audiobook import Extension, frontend as frontend_lib
 
 
 def test_get_default_config():
@@ -8,7 +8,7 @@ def test_get_default_config():
 
     config = ext.get_default_config()
 
-    assert '[audiobooks]' in config
+    assert '[audiobook]' in config
     assert 'enabled = true' in config
 
 
