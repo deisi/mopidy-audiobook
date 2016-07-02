@@ -4,6 +4,8 @@ import logging
 import os
 
 from mopidy import config, ext
+from mopidy.local import Library
+from mopidy.local.json import JsonLibrary
 
 
 __version__ = '0.1.0'
@@ -24,12 +26,35 @@ class Extension(ext.Extension):
 
     def get_config_schema(self):
         schema = super(Extension, self).get_config_schema()
-        schema['media_dirs'] = config.List(optional=True)
-        schema['follow_symlinks'] = config.Boolean(optional=True)
-        schema['metadata_timeout'] = config.Integer(optional=True)
-        
+        schema['library'] = config.String()
+        schema['media_dir'] = config.Path()
+        schema['scan_timeout'] = config.Integer(
+            minimum=1000, maximum=1000 * 60 * 60)
+        schema['scan_flush_threshold'] = config.Integer(minimum=0)
+        schema['scan_follow_symlinks'] = config.Boolean()
+        schema['excluded_file_extensions'] = config.List(optional=True)
         return schema
 
     def setup(self, registry):
-        from .backend import FoobarBackend
-        registry.add('backend', FoobarBackend)
+        
+        from .frontend import AudiobookFrontend
+        registry.add('frontend', AudiobookFrontend)
+
+        from .backend import AudiobookBackend
+
+        AudiobookBackend.libraries = registry['local:audiobook']
+        
+        registry.add('backend', AudiobookBackend)
+        registry.add('local:audiobook', AudiobookLibrary)
+        
+
+class AudiobookLibrary(Library):
+    
+    ROOT_DIRECTORY_URI = 'audiobook:directory'
+    name='audiobook'
+
+    def __init__(self, config):
+        logger.debug('AudiobookLibrary Init')
+        self._config = config
+        self._media_dir = config['audiobook']['media_dir']
+    
